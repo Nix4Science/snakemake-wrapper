@@ -20,7 +20,7 @@ rule test:
         flake = ".#pyshell",
         shell = lambda wildcards, input, output: f"python3 {input.script} {wildcards.i} > {output}"
     wrapper:
-        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/main"
+        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/0.0.1"
 
 
 rule test_bytes:
@@ -36,6 +36,6 @@ rule test_bytes:
         flake = ".#pyshell",
         shell = b"python3 {input.script} {wildcards.i} > {output}"
     wrapper:
-        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/main"
+        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/0.0.1"
 
 
