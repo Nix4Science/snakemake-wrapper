@@ -22,7 +22,7 @@ rule test:
         flake = ".#pyshell",
         shell = lambda wildcards, input, output: f"python3 {input.script} {wildcards.i} > {output}"
     wrapper:
-        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/main"
+        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/0.0.1"
 ```
 
 To simplify the transition from a classical `Snakefile` to a `Snakefile` using this wrapper, we extend the `params.shell` to do the evaluation inside the wrapper. 
