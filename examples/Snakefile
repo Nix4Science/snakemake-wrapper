@@ -1,0 +1,42 @@
+
+N=3
+
+
+rule all:
+    input:
+        expand("test_bytes_{i}", i=range(N)),
+        expand("test_{i}", i=range(N))
+
+rule test:
+    input:
+        "flake.nix",
+        "flake.lock",
+        script="run.py"
+    output:
+        "test_{i}"
+    wildcard_constraints:
+        i="\d+"
+    params:
+        flake = ".#pyshell",
+        shell = lambda wildcards, input, output: f"python3 {input.script} {wildcards.i} > {output}"
+    wrapper:
+        # "file:/home/quentin/ghq/github.com/Nix4Science/nix-snakemake-wrapper"
+        "https://github.com/Nix4Science/nix-snakemake-wrapper"
+
+
+rule test_bytes:
+    input:
+        "flake.nix",
+        "flake.lock",
+        script="run.py"
+    output:
+        "test_bytes_{i}"
+    wildcard_constraints:
+        i="\d+"
+    params:
+        flake = ".#pyshell",
+        shell = b"python3 {input.script} {wildcards.i} > {output}"
+    wrapper:
+        "https://github.com/Nix4Science/nix-snakemake-wrapper"
+
+
