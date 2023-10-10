@@ -9,6 +9,7 @@ shell_command = snakemake.params.get("shell", "")
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
 assert shell_command is not None, "`params.shell` is required"
+assert flake is not None, "`params.flake` is required"
 
 if type(shell_command) == bytes:
     shell_command = shell_command.decode("utf-8").format(wildcards=snakemake.wildcards,\
