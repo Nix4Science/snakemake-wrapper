@@ -5,6 +5,7 @@ N=3
 rule all:
     input:
         expand("test_bytes_{i}", i=range(N)),
+        expand("test_guix_{i}", i=range(N)),
         expand("test_{i}", i=range(N))
 
 rule test:
@@ -20,7 +21,7 @@ rule test:
         flake = ".#pyshell",
         shell = lambda wildcards, input, output: f"python3 {input.script} {wildcards.i} > {output}"
     wrapper:
-        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/0.0.1"
+        "https://github.com/Nix4Science/snakemake-wrapper/raw/0.1.0/nix"
 
 
 rule test_bytes:
@@ -36,6 +37,21 @@ rule test_bytes:
         flake = ".#pyshell",
         shell = b"python3 {input.script} {wildcards.i} > {output}"
     wrapper:
-        "https://github.com/Nix4Science/nix-snakemake-wrapper/raw/0.0.1"
+        "https://github.com/Nix4Science/snakemake-wrapper/raw/0.1.0/nix"
+
+rule test_guix:
+    input:
+        channels="channels.scm",
+        manifest="manifest.scm",
+        script="run.py"
+    output:
+        "test_guix_{i}"
+    wildcard_constraints:
+        i="\d+"
+    params:
+        container=True,
+        shell = b"python3 {input.script} {wildcards.i} > {output}"
+    wrapper:
+        "https://github.com/Nix4Science/snakemake-wrapper/raw/0.1.0/guix"
 
 

@@ -3,23 +3,30 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/23.05";
+    nuix.url = "github:GuilloteauQ/nix-overlay-guix";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, nuix }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs { inherit system; overlays = [ nuix.overlays.default ]; };
     in
     {
 
       devShells.${system} = {
         default = pkgs.mkShell {
-          buildInputs = with pkgs; [
+          shellHook = ''
+            sudo ${pkgs.guix}/bin/guix-daemon > .guix-daemon.log 2>&1 &
+            GD_PID=$!
+            trap "sudo kill $GD_PID" SIGINT
+          '';
+          packages = with pkgs; [
             snakemake
+            guix
           ];
         };
         pyshell = pkgs.mkShell {
-          buildInputs = with pkgs; [
+          packages = with pkgs; [
             python3
           ];
         };
